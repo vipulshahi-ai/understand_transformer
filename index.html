@@ -1496,17 +1496,27 @@
                     <div style="padding: 20px; color: #d4d4d4; font-size: 0.9rem; line-height: 1.6;">
                         <div style="margin-bottom: 15px;">
                             <span style="color: #569cd6;">from</span> transformers <span
-                                style="color: #569cd6;">import</span> pipeline<br><br>
-                            <span style="color: #6a9955;"># The Decoder *generates* text (Hindi) from context
-                                (English)</span><br>
-                            translator = pipeline(<span style="color: #ce9178;">'translation_en_to_hi'</span>,
-                            model=<span style="color: #ce9178;">'Helsinki-NLP/opus-mt-en-hi'</span>)<br><br>
-                            result = translator(<span style="color: #ce9178;">"Transformers are amazing!"</span>)<br>
-                            <span style="color: #dcdcaa;">print</span>(result)
+                                style="color: #569cd6;">import</span> AutoTokenizer, AutoModelForSeq2SeqLM<br><br>
+                            <span style="color: #6a9955;"># Load tokenizer and model directly</span><br>
+                            tokenizer = AutoTokenizer.from_pretrained(<span
+                                style="color: #ce9178;">"Helsinki-NLP/opus-mt-en-hi"</span>)<br>
+                            model = AutoModelForSeq2SeqLM.from_pretrained(<span
+                                style="color: #ce9178;">"Helsinki-NLP/opus-mt-en-hi"</span>)<br>
+                            <span style="color: #dcdcaa;">print</span>(<span style="color: #ce9178;">"\nTokenizer and
+                                model loaded for English to Hindi translation."</span>)<br><br>
+                            text = <span style="color: #ce9178;">"Transformers are amazing!"</span><br>
+                            input_ids = tokenizer(text, return_tensors=<span
+                                style="color: #ce9178;">"pt"</span>).input_ids<br><br>
+                            <span style="color: #6a9955;"># Generate translation IDs using the model</span><br>
+                            translated_ids = model.generate(input_ids, max_new_tokens=<span
+                                style="color: #b5cea8;">40</span>)<br><br>
+                            <span style="color: #6a9955;"># Decode the generated IDs to Hindi text</span><br>
+                            hindi_text = tokenizer.decode(translated_ids[<span style="color: #b5cea8;">0</span>],
+                            skip_special_tokens=<span style="color: #569cd6;">True</span>)<br>
+                            <span style="color: #dcdcaa;">print</span>(hindi_text)
                         </div>
                         <div style="background: #000; padding: 10px; border-left: 3px solid #5856d6; color: #fff;">
-                            <span style="color: #5856d6;">> Output:</span> [{'translation_text': 'ट्रांसफॉर्मर्स अद्भुत
-                            हैं!'}]
+                            <span style="color: #5856d6;">> Output:</span> ट्रांसफॉर्मर्स अद्भुत हैं!
                         </div>
                     </div>
                 </div>
